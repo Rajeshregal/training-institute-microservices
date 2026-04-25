@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="course-service" />
-        <module name="teacher-service" />
         <module name="payment-service" />
         <module name="common-library" />
         <module name="api-gateway-service" />
@@ -22,6 +21,7 @@
         </processorPath>
         <module name="student-service" />
         <module name="auth-service" />
+        <module name="teacher-service" />
       </profile>
     </annotationProcessing>
   </component>
