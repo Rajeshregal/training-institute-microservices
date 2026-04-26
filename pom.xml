@@ -40,6 +40,7 @@
         <spring.cloud.version>2023.0.1</spring.cloud.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <lombok.version>1.18.22</lombok.version>
     </properties>
 
     <!-- Dependency Management -->
@@ -80,7 +81,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.30</version>
+                <version>${lombok.version}</version>
             </dependency>
 
             <!-- Resilience4j -->
@@ -115,7 +116,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.11.0</version>
+                    <version>3.8.1</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
