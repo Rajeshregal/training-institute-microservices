@@ -1,6 +1,3 @@
 spring:
-  application:
-    name: student-service
-
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://host.docker.internal:8888
