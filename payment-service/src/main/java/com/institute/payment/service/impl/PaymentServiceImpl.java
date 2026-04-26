@@ -1,5 +1,6 @@
 package com.institute.payment.service.impl;
 
+import com.institute.payment.client.CourseClient;
 import com.institute.payment.client.StudentClient;
 import com.institute.payment.dto.CourseResponse;
 import com.institute.payment.dto.PaymentRequest;
@@ -9,6 +10,7 @@ import com.institute.payment.entity.Payment;
 import com.institute.payment.repository.PaymentRepository;
 import com.institute.payment.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -21,14 +23,16 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     // Approach 01 to communicate one Microservice to Other MicroService by using RestTemplate
-    @Autowired
-    private RestTemplate restTemplate;
-
+//    @Autowired
+//    private RestTemplate restTemplate;
+    // Approach 02 to communicate one Microservice to Other MicroService by using FeignClient
+    private final StudentClient studentClient;
+    private final CourseClient courseClient;
     @Override
     public PaymentResponse createPayment(PaymentRequest paymentRequest, HttpServletRequest request ) {
         validateStudent(paymentRequest.getStudentCode(),request);
@@ -114,51 +118,81 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
     }
 
+//    private void validateStudent(String studentCode,HttpServletRequest  request){
+//        String url ="http://localhost:8082/api/student/code/"+studentCode;
+//        try{
+//            String authHeader = request.getHeader("Authorization");
+//            HttpHeaders headers= new HttpHeaders();
+//            headers.set("Authorization",authHeader);
+//            HttpEntity<String> entity = new HttpEntity<>(headers);
+//            ResponseEntity<StudentResponse> response =
+//                    restTemplate.exchange(
+//                            url,
+//                            HttpMethod.GET,
+//                            entity,
+//                            StudentResponse.class
+//                    );
+//
+//            StudentResponse student = response.getBody();
+//
+//            if(student == null){
+//                throw new RuntimeException("Student not found");
+//            }
+//        } catch (Exception e) {
+//            throw new RuntimeException(
+//                    "Invalid Student request with :: " +studentCode
+//            );
+//        }
+//    }
+//
+//    private void validateCourse(String courseCode,HttpServletRequest  request) {
+//
+//        String url =
+//                "http://localhost:8084/api/course/code/" + courseCode;
+//
+//        try {
+//            String authHeader = request.getHeader("Authorization");
+//            HttpHeaders headers= new HttpHeaders();
+//            headers.set("Authorization",authHeader);
+//            HttpEntity<String> entity = new HttpEntity<>(headers);
+//            ResponseEntity<CourseResponse> course =
+//                    restTemplate.exchange(
+//                            url,
+//                            HttpMethod.GET,
+//                            entity,
+//                            CourseResponse.class
+//                    );
+//
+//            if (course == null) {
+//                throw new RuntimeException(
+//                        "Course not found"
+//                );
+//            }
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException(
+//                    "Invalid Course: " + courseCode
+//            );
+//        }
+//    }
+
     private void validateStudent(String studentCode,HttpServletRequest  request){
-        String url ="http://localhost:8082/api/student/code/"+studentCode;
         try{
-            String authHeader = request.getHeader("Authorization");
-            HttpHeaders headers= new HttpHeaders();
-            headers.set("Authorization",authHeader);
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            ResponseEntity<StudentResponse> response =
-                    restTemplate.exchange(
-                            url,
-                            HttpMethod.GET,
-                            entity,
-                            StudentResponse.class
-                    );
-
-            StudentResponse student = response.getBody();
-
+            StudentResponse student = studentClient.getStudentByCode(studentCode);
             if(student == null){
                 throw new RuntimeException("Student not found");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(
-                    "Invalid Student request with :: " +studentCode
+                    "REAL ERROR -> " + e.getMessage()
             );
         }
     }
 
     private void validateCourse(String courseCode,HttpServletRequest  request) {
-
-        String url =
-                "http://localhost:8084/api/course/code/" + courseCode;
-
         try {
-            String authHeader = request.getHeader("Authorization");
-            HttpHeaders headers= new HttpHeaders();
-            headers.set("Authorization",authHeader);
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            ResponseEntity<CourseResponse> course =
-                    restTemplate.exchange(
-                            url,
-                            HttpMethod.GET,
-                            entity,
-                            CourseResponse.class
-                    );
-
+            CourseResponse course = courseClient.getCourseByCode(courseCode);
             if (course == null) {
                 throw new RuntimeException(
                         "Course not found"
