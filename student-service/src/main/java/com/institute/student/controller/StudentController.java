@@ -56,4 +56,11 @@ public class StudentController {
 
         return studentService.deleteStudent(id);
     }
+    @GetMapping("/code/{studentCode}")
+    @PreAuthorize("hasAnyRole('ADMIN','TRAINER')")
+    public StudentResponse getStudentByCode(
+            @PathVariable String studentCode) {
+
+        return studentService.getStudentByCode(studentCode);
+    }
 }

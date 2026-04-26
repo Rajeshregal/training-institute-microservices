@@ -16,4 +16,6 @@ public interface CourseService {
     CourseResponse updateCourse(Long id, CourseRequest request);
 
     String deleteCourse(Long id);
+
+    CourseResponse getCourseByCode(String courseCode);
 }

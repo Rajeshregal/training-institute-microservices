@@ -98,4 +98,16 @@ public class CourseServiceImpl implements CourseService {
                 .status(course.getStatus())
                 .build();
     }
+    @Override
+    public CourseResponse getCourseByCode(
+            String courseCode) {
+
+        Course course = courseRepository
+                .findByCourseCode(courseCode)
+                .orElseThrow(() -> new RuntimeException(
+                        "Course not found with code: " + courseCode
+                ));
+
+        return mapToResponse(course);
+    }
 }

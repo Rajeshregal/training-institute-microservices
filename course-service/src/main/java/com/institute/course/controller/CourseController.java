@@ -56,4 +56,11 @@ public class CourseController {
 
         return courseService.deleteCourse(id);
     }
+    @GetMapping("/code/{courseCode}")
+    @PreAuthorize("hasAnyRole('ADMIN','TRAINER','STUDENT')")
+    public CourseResponse getCourseByCode(
+            @PathVariable String courseCode) {
+
+        return courseService.getCourseByCode(courseCode);
+    }
 }

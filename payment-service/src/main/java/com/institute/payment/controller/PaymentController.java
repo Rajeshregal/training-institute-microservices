@@ -3,8 +3,10 @@ package com.institute.payment.controller;
 import com.institute.payment.dto.PaymentRequest;
 import com.institute.payment.dto.PaymentResponse;
 import com.institute.payment.service.PaymentService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +18,15 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','STUDENT')")
     public PaymentResponse createPayment(
             @Valid @RequestBody PaymentRequest request) {
 
-        return paymentService.createPayment(request);
+        return paymentService.createPayment(request,httpServletRequest);
     }
 
     @GetMapping("/{id}")

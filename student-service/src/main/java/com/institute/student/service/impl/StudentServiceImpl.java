@@ -96,4 +96,16 @@ public class StudentServiceImpl implements StudentService {
                 .status(student.getStatus())
                 .build();
     }
+    @Override
+    public StudentResponse getStudentByCode(
+            String studentCode) {
+
+        Student student = studentRepository
+                .findByStudentCode(studentCode)
+                .orElseThrow(() -> new RuntimeException(
+                        "Student not found with code: " + studentCode
+                ));
+
+        return mapToResponse(student);
+    }
 }

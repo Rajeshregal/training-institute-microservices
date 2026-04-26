@@ -16,4 +16,6 @@ public interface StudentService {
     StudentResponse updateStudent(Long id, StudentRequest request);
 
     String deleteStudent(Long id);
+
+    StudentResponse getStudentByCode(String studentCode);
 }

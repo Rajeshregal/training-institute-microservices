@@ -2,12 +2,13 @@ package com.institute.payment.service;
 
 import com.institute.payment.dto.PaymentRequest;
 import com.institute.payment.dto.PaymentResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
 public interface PaymentService {
 
-    PaymentResponse createPayment(PaymentRequest request);
+    PaymentResponse createPayment(PaymentRequest paymentRequest, HttpServletRequest request);
 
     PaymentResponse getPaymentById(Long id);
 
